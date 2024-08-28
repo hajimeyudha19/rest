@@ -24,7 +24,7 @@ public class BukuService {
     }
 
     public Optional<Buku> getBukuById(Long id) {
-        log.info("Now getting buku data with id {}" + id);
+        log.info("Now getting buku data with id {}", id);
         return bukuRepository.findByIdAndIsActive(id, true);
     }
 
@@ -34,7 +34,7 @@ public class BukuService {
     }
 
     public Buku updateBuku(Long id, Buku updatedBuku) {
-        log.info("Now getting buku data with id {}", id);
+        log.info("Now updating buku data with id {}", id);
         return bukuRepository.findByIdAndIsActive(id, true).map(buku -> {
             buku.setJudul(updatedBuku.getJudul());
             buku.setPenulis(updatedBuku.getPenulis());
@@ -48,8 +48,9 @@ public class BukuService {
 
     public void deleteBuku(Long id) {
         log.info("Now deleting buku data with id {}", id);
+        
         Optional<Buku> bukuGet = bukuRepository.findByIdAndIsActive(id, true);
-        bukuGet.get().setIsActive(false);
+                bukuGet.get().setIsActive(false);
         bukuRepository.save(bukuGet.get());
     }
 }

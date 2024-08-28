@@ -42,6 +42,9 @@ public class BukuController {
 
     @PostMapping
     public ResponseEntity<String> addBuku(@RequestBody Buku buku) {
+        if(buku.getId() != null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Buku id must null.");
+        }
         if (buku == null || buku.getJudul() == null || buku.getPenulis().length() <= 0 || buku.getTahunTerbit() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Buku details are missing or incomplete.");
         }
@@ -54,18 +57,14 @@ public class BukuController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> editBuku(@PathVariable Long id, @RequestBody Buku buku) {
-        if (buku == null || buku.getJudul() == null || buku.getPenulis().length() <= 0 || buku.getTahunTerbit() == null) {
+        if (buku == null || buku.getJudul() == null || buku.getPenulis().length() <= 0 || buku.getTahunTerbit() == null || buku.getId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Buku details are missing or incomplete.");
         }
         if (buku.getTahunTerbit() < 0){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Buku tahun terbit must positive numbers.");
         }
-        if (!bukuService.getBukuById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        buku.setId(id);
-        bukuService.saveBuku(buku);
-        return ResponseEntity.ok("Buku {} has been successfully updated.");
+        bukuService.updateBuku(buku.getId(), buku);
+        return ResponseEntity.ok("Buku has been successfully updated.");
     }
 
     @DeleteMapping("/{id}")
