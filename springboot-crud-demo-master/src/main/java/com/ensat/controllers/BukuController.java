@@ -65,7 +65,7 @@ public class BukuController {
         }
         buku.setId(id);
         bukuService.saveBuku(buku);
-        return ResponseEntity.ok("Buku has been successfully updated.");
+        return ResponseEntity.ok("Buku {} has been successfully updated.");
     }
 
     @DeleteMapping("/{id}")

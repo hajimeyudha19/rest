@@ -23,5 +23,7 @@ public class Buku {
     private String penulis;
 
     private Integer tahunTerbit;
+
+    private Boolean isActive = true;
     
 }

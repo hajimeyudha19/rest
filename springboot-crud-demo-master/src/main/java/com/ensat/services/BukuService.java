@@ -20,12 +20,12 @@ public class BukuService {
 
     public List<Buku> getAllBuku() {
         log.info("Now getting all buku data");
-        return bukuRepository.findAll();
+        return bukuRepository.findAllByIsActive(true);
     }
 
     public Optional<Buku> getBukuById(Long id) {
         log.info("Now getting buku data with id {}" + id);
-        return bukuRepository.findById(id);
+        return bukuRepository.findByIdAndIsActive(id, true);
     }
 
     public Buku saveBuku(Buku buku) {
@@ -35,7 +35,7 @@ public class BukuService {
 
     public Buku updateBuku(Long id, Buku updatedBuku) {
         log.info("Now getting buku data with id {}", id);
-        return bukuRepository.findById(id).map(buku -> {
+        return bukuRepository.findByIdAndIsActive(id, true).map(buku -> {
             buku.setJudul(updatedBuku.getJudul());
             buku.setPenulis(updatedBuku.getPenulis());
             buku.setTahunTerbit(updatedBuku.getTahunTerbit());
@@ -48,7 +48,9 @@ public class BukuService {
 
     public void deleteBuku(Long id) {
         log.info("Now deleting buku data with id {}", id);
-        bukuRepository.deleteById(id);
+        Optional<Buku> bukuGet = bukuRepository.findByIdAndIsActive(id, true);
+        bukuGet.get().setIsActive(false);
+        bukuRepository.save(bukuGet.get());
     }
 }
 
